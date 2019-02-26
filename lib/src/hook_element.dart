@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/src/hook.dart';
 import './hook_widget.dart';
 
 class RactorHookElement extends ComponentElement {
   HookWidget _widget;
-  int hookIndex = 0;
-  List<Object> stateStack = [];
-  List<void Function() Function()> mountHookCallbacks = [];
-  List<void Function()> unmountHookCallbacks = [];
+  Hook hook = Hook();
 
   /// Creates an element that uses the given widget as its configuration.
   RactorHookElement(HookWidget widget)
@@ -14,35 +12,6 @@ class RactorHookElement extends ComponentElement {
         super(widget);
 
   static RactorHookElement currentContext;
-
-  useContext() {
-    return RactorHookElement.currentContext;
-  }
-
-  /// If can't find element at [stateStack](Bad State: No element), it means it's new state, and should be append to [stateStack]
-  List<dynamic> useState<T>(T state) {
-    try {
-      var value = stateStack.elementAt(hookIndex);
-      setState(nextState) {
-        stateStack.replaceRange(hookIndex, hookIndex + 1, [nextState]);
-      }
-
-      hookIndex++;
-      return [value, setState];
-    } catch (e) {
-      stateStack.add(state);
-      setState(nextState) {
-        stateStack.replaceRange(hookIndex, hookIndex + 1, [nextState]);
-      }
-
-      hookIndex++;
-      return [state, setState];
-    }
-  }
-
-  void useMount(void Function() Function() mountCallback) {
-    mountHookCallbacks.add(mountCallback);
-  }
 
   @override
   Widget build() {
@@ -54,9 +23,11 @@ class RactorHookElement extends ComponentElement {
 
   /// cause of [mount] called before [build]. So create a method [didUpdate] for react like didUpdate.
   void didUpdate() {
-    mountHookCallbacks
-        .forEach((callback) => unmountHookCallbacks.add(callback()));
-    hookIndex = 0;
+    this
+        .hook
+        .mountCallbacks
+        .forEach((callback) => this.hook.unmountCallbacks.add(callback()));
+    this.hook.index = 0;
   }
 
   @override
@@ -66,13 +37,13 @@ class RactorHookElement extends ComponentElement {
 
   @override
   void unmount() {
-    unmountHookCallbacks.forEach((callback) => callback);
+    this.hook.unmountCallbacks.forEach((callback) => callback);
     super.unmount();
   }
 
   @override
   void update(Widget newWidget) {
-    hookIndex = 0;
+    this.hook.index = 0;
     super.update(newWidget);
   }
 }
