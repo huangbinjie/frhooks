@@ -1,7 +1,7 @@
-import './hook_element.dart';
+import 'package:flutter_hooks/src/useContext.dart';
 
-useState(dynamic initialState) {
-  var currentContext = RactorHookElement.currentContext;
+useState<T>([T initialState]) {
+  var currentContext = useContext();
   var currentHook = currentContext.hook;
   var hookStateStack = currentHook.stateStack;
   var hookStateIndex = currentHook.index;

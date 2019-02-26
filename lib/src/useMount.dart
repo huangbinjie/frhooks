@@ -1,7 +1,7 @@
-import './hook_element.dart';
+import 'package:flutter_hooks/src/useContext.dart';
 
 useMount(void Function() Function() useMountCallback) {
-  var currentContext = RactorHookElement.currentContext;
+  var currentContext = useContext();
   var currentHook = currentContext.hook;
   var currentMountCallbacks = currentHook.mountCallbacks;
 

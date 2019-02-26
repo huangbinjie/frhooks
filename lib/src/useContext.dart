@@ -1,6 +1,6 @@
 import './hook_element.dart';
 
-useContext() {
+RactorHookElement useContext() {
   var currentContext = RactorHookElement.currentContext;
 
   assert(currentContext != null);
