@@ -1,18 +1,17 @@
-// import 'package:flutter_hooks/flutter_hooks.dart';
+part of 'hook.dart';
 
-// T useCallback<T extends dynamic Function()>(T callback) {
-//   var currentContext = useContext();
-//   var currentHook = currentContext.hook;
-//   var hookCallbackList = currentHook.callbackList;
-//   var hookCallbackIndex = currentHook.callbackIndex;
+useCallback(void Function() Function() callback, [List<dynamic> deps = null]) {
+  _workInProgressHook = _createWorkInProgressHook();
 
-//   try {
-//     var cachedCallback = hookCallbackList.elementAt(hookCallbackIndex);
-//     currentHook.callbackIndex++;
-//     return cachedCallback;  
-//   } catch (e) {
-//     hookCallbackList.add(callback);
-//     currentHook.callbackIndex++;
-//     return callback;
-//   }
-// }
+  if (_workInProgressHook.memoizedState == null) {
+    _workInProgressHook.memoizedState = {"callback": callback, "deps": deps};
+  } else {
+    var memoizedState = _workInProgressHook.memoizedState;
+
+    if (areHookInputsEqual(memoizedState["deps"], deps)) {
+      _workInProgressHook.memoizedState = {"callback": callback, "deps": deps};
+    }
+  }
+
+  return _workInProgressHook.memoizedState["callback"];
+}

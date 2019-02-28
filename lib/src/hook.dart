@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 part 'useContext.dart';
 part 'useState.dart';
 part 'useEffect.dart';
+part 'useCallback.dart';
 part './hook_widget.dart';
 part 'hook_element.dart';
 
@@ -23,7 +24,6 @@ Hook _createWorkInProgressHook() {
   _workInProgressHook = currentContext.hook;
 
   if (_workInProgressHook == null) {
-    // 没有 hook 说明需要创建一个
     _workInProgressHook = currentContext.hook;
   } else {
     if (_workInProgressHook.next == null) {

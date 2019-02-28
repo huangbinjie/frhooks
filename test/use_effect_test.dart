@@ -19,6 +19,31 @@ void main() {
     expect(effectResult, 1);
   });
 
+  testWidgets('useDidmount', (tester) async {
+    StateContainer stateContainer;
+    int effectResult = 0;
+
+    await tester.pumpWidget(HookBuilder(
+      builder: () {
+        stateContainer = useState(0);
+        useEffect(() {
+          effectResult++;
+        }, []);
+        return Container();
+      },
+    ));
+
+    expect(stateContainer.state, 0);
+    expect(effectResult, 1);
+
+    stateContainer.setState(1);
+
+    await tester.pump();
+
+    expect(stateContainer.state, 1);
+    expect(effectResult, 1);
+  });
+
   testWidgets('remove effect', (tester) async {
     int effectResult = 0;
 

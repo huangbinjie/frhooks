@@ -6,19 +6,13 @@ useEffect(void Function() Function() effectCallback,
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memoizedState == null) {
-    _workInProgressHook.memoizedState = {
-      "effectCallback": effectCallback,
-      "deps": deps
-    };
+    _workInProgressHook.memoizedState = deps;
     currentContext.updatePhaseEffectQueue.add(effectCallback);
   } else {
-    var prefEffect = _workInProgressHook.memoizedState;
+    var prefDeps = _workInProgressHook.memoizedState;
 
-    if (areHookInputsEqual(prefEffect["deps"], deps)) {
-      _workInProgressHook.memoizedState = {
-        "effectCallback": effectCallback,
-        "deps": deps
-      };
+    if (areHookInputsEqual(prefDeps, deps)) {
+      _workInProgressHook.memoizedState = deps;
     } else {
       currentContext.updatePhaseEffectQueue.add(effectCallback);
     }
