@@ -1,7 +1,6 @@
 part of 'hook.dart';
 
-useEffect(void Function() Function() effectCallback,
-    [List<dynamic> deps = null]) {
+useEffect(void Function() Function() effectCallback, [List<dynamic> deps]) {
   var currentContext = _resolveCurrentContext();
   _workInProgressHook = _createWorkInProgressHook();
 

@@ -38,6 +38,7 @@ class HookElement extends ComponentElement {
   @override
   void unmount() {
     this.unmountPhaseEffectQueue.forEach((callback) => callback());
+    this.unmountPhaseEffectQueue.clear();
     super.unmount();
   }
 
