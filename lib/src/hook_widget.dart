@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import './hook_element.dart';
+part of './hook.dart';
 
 abstract class HookWidget extends Widget {
   const HookWidget({Key key}) : super(key: key);
 
   @override
-  RactorHookElement createElement() {
-    return RactorHookElement(this);
+  HookElement createElement() {
+    return HookElement(this);
   }
 
   Widget build();

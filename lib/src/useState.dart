@@ -1,28 +1,26 @@
-import 'package:flutter_hooks/src/useContext.dart';
+part of 'hook.dart';
 
-useState<T>([T initialState]) {
-  var currentContext = useContext();
-  var currentHook = currentContext.hook;
-  var hookStateStack = currentHook.stateStack;
-  var hookStateIndex = currentHook.index;
+class StateContainer<T> {
+  T state;
+  void Function(T) setState;
 
-  try {
-    var value = hookStateStack.elementAt(hookStateIndex);
-    setState(nextState) {
-      hookStateStack
-          .replaceRange(hookStateIndex, hookStateIndex + 1, [nextState]);
-    }
+  StateContainer(this.state, this.setState);
+}
 
-    hookStateIndex++;
-    return [value, setState];
-  } catch (e) {
-    hookStateStack.add(initialState);
-    setState(nextState) {
-      hookStateStack
-          .replaceRange(hookStateIndex, hookStateIndex + 1, [nextState]);
-    }
+_genSetState(currentHook) {
+  return (nextState) {
+    currentHook.baseState = nextState;
+    _resolveCurrentContext().markNeedsBuild();
+  };
+}
 
-    hookStateIndex++;
-    return [initialState, setState];
+StateContainer<T> useState<T>([T initialState]) {
+  _workInProgressHook = _createWorkInProgressHook();
+
+  if (_workInProgressHook.baseState == null) {
+    _workInProgressHook.baseState = initialState;
   }
+
+  return StateContainer(
+      _workInProgressHook.baseState, _genSetState(_workInProgressHook));
 }

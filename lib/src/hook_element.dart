@@ -1,21 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/src/hook.dart';
-import './hook_widget.dart';
+part of './hook.dart';
 
-class RactorHookElement extends ComponentElement {
+class HookElement extends ComponentElement {
   HookWidget _widget;
   Hook hook = Hook();
 
+  List<void Function() Function()> updatePhaseEffectQueue = [];
+  List<void Function()> unmountPhaseEffectQueue = [];
+
   /// Creates an element that uses the given widget as its configuration.
-  RactorHookElement(HookWidget widget)
+  HookElement(HookWidget widget)
       : _widget = widget,
         super(widget);
 
-  static RactorHookElement currentContext;
+  static HookElement currentContext;
 
   @override
   Widget build() {
-    RactorHookElement.currentContext = this;
+    HookElement.currentContext = this;
     var widget = _widget.build();
     didUpdate();
     return widget;
@@ -23,27 +24,25 @@ class RactorHookElement extends ComponentElement {
 
   /// cause of [mount] called before [build]. So create a method [didUpdate] for react like didUpdate.
   void didUpdate() {
-    this
-        .hook
-        .mountCallbacks
-        .forEach((callback) => this.hook.unmountCallbacks.add(callback()));
-    this.hook.index = 0;
-  }
+    updatePhaseEffectQueue.forEach((callback) {
+      var removalEffectCallback = callback();
+      if (removalEffectCallback != null) {
+        this.unmountPhaseEffectQueue.add(removalEffectCallback);
+      }
+    });
 
-  @override
-  void mount(Element parent, newSlot) {
-    super.mount(parent, newSlot);
+    updatePhaseEffectQueue.clear();
+    _workInProgressHook = null;
   }
 
   @override
   void unmount() {
-    this.hook.unmountCallbacks.forEach((callback) => callback);
+    this.unmountPhaseEffectQueue.forEach((callback) => callback());
     super.unmount();
   }
 
   @override
   void update(Widget newWidget) {
-    this.hook.index = 0;
     super.update(newWidget);
   }
 }
