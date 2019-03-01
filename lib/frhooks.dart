@@ -1,3 +1,3 @@
-library hooks;
+library frhooks;
 
 export './src/hook.dart';

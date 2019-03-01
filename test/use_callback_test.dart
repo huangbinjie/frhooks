@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks2/flutter_hooks2.dart';
+import 'package:frhooks/frhooks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import './hook_builder.dart';
 
