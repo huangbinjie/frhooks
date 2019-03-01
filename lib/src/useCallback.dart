@@ -1,6 +1,6 @@
 part of 'hook.dart';
 
-useCallback(void Function() Function() callback, [List<dynamic> deps = null]) {
+useCallback(dynamic Function() callback, [List<dynamic> deps]) {
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memoizedState == null) {
@@ -8,7 +8,7 @@ useCallback(void Function() Function() callback, [List<dynamic> deps = null]) {
   } else {
     var memoizedState = _workInProgressHook.memoizedState;
 
-    if (areHookInputsEqual(memoizedState["deps"], deps)) {
+    if (!areHookInputsEqual(memoizedState["deps"], deps)) {
       _workInProgressHook.memoizedState = {"callback": callback, "deps": deps};
     }
   }
