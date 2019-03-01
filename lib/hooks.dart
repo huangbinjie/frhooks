@@ -1,3 +1,3 @@
-library flutter_hooks;
+library hooks;
 
 export './src/hook.dart';

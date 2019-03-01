@@ -1,8 +1,7 @@
-name: flutter_hooks
-description: A starting point for Dart libraries or applications.
-# version: 1.0.0
-# homepage: https://www.example.com
-# author: 黄斌杰 <email@example.com>
+name: hooks
+description: use react like hooks in flutter!
+version: 1.0.0
+author: 黄斌杰 <email@example.com>
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
@@ -10,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  tuple: ^1.0.1
 
 dev_dependencies:
   flutter_test:
