@@ -43,20 +43,14 @@ void main() {
       return Container();
     }));
 
-    expect(cbList[0](), 1);
-    expect(stateContainer.state, 0);
-
     stateContainer.setState(1);
 
     await tester.pump();
 
-    expect(cbList[0](), 1);
-    expect(cbList[1](), 1);
     expect(cbList[0] == cbList[1], true);
-    expect(stateContainer.state, 1);
   });
 
-  testWidgets("useCallback changing inputs memorize new callback",
+  testWidgets("useCallback changing inputs return new callback",
       (tester) async {
     List cbList = [];
     StateContainer stateContainer;
@@ -69,16 +63,10 @@ void main() {
       return Container();
     }));
 
-    expect(cbList[0](), 1);
-    expect(stateContainer.state, 0);
-
     stateContainer.setState(1);
 
     await tester.pump();
 
-    expect(cbList[0](), 1);
-    expect(cbList[1](), 1);
     expect(cbList[0] == cbList[1], false);
-    expect(stateContainer.state, 1);
   });
 }
