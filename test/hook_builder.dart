@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hooks/hooks.dart';
+import 'package:flutter_hooks2/flutter_hooks2.dart';
 
 class HookBuilder extends HookWidget {
   /// The callback used by [HookBuilder] to create a widget.

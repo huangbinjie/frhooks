@@ -1,6 +1,7 @@
-name: hooks
+name: flutter_hooks2
 description: use react like hooks in flutter!
 version: 1.0.0
+homepage: https://github.com/huangbinjie/flutter-hooks
 author: 黄斌杰 <email@example.com>
 
 environment:
