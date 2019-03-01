@@ -3,7 +3,7 @@
 use react like hooks in flutter.
 
 ## Motivation
-Have the same thinking of the (flutter_hooks motivation)[https://github.com/rrousselGit/flutter_hooks#motivation]. React hooks is more brief to manage local state, and `StatefulWidget` are verbose. This library brings hooks to flutter. If your are React person, you will like it.
+Have the same thinking of the [flutter_hooks motivation](https://github.com/rrousselGit/flutter_hooks#motivation). React hooks is more brief to manage local state, and `StatefulWidget` are verbose. This library brings hooks to flutter. If your are React person, you will like it.
 
 # Usage
 
