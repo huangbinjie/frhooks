@@ -1,7 +1,7 @@
 part of 'hook.dart';
 
 HookElement useContext() {
-  var currentContext = HookElement.currentContext;
+  var currentContext = _resolveCurrentContext();
 
   assert(currentContext != null);
 

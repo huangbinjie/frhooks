@@ -14,9 +14,10 @@ class Hook {
 }
 
 Hook _workInProgressHook;
+List<HookElement> _stashedContextQueue = [];
 
 HookElement _resolveCurrentContext() {
-  return HookElement.currentContext;
+  return _stashedContextQueue.last;
 }
 
 Hook _createWorkInProgressHook() {

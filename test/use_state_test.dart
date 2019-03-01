@@ -40,8 +40,38 @@ void main() {
         return Container();
       },
     ));
-    
+
     expect(stateContainer.state, 0);
     expect(element.dirty, false);
+  });
+
+  testWidgets("build widget before useState", (tester) async {
+    StateContainer<int> stateContainer;
+    StateContainer<String> childStateContainer;
+    int renderedNum = 0;
+
+    await tester.pumpWidget(HookBuilder(
+      builder: () {
+        renderedNum++;
+        final c = HookBuilder(builder: () {
+          childStateContainer = useState("1");
+          return Container();
+        });
+        stateContainer = useState(0);
+        return c;
+      },
+    ));
+
+    expect(stateContainer.state, 0);
+    expect(childStateContainer.state, "1");
+    expect(renderedNum, 1);
+
+    stateContainer.setState(1);
+
+    await tester.pump();
+
+    expect(stateContainer.state, 1);
+    expect(childStateContainer.state, "1");
+    expect(renderedNum, 2);
   });
 }

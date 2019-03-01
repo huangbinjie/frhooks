@@ -16,9 +16,12 @@ class HookElement extends ComponentElement {
 
   @override
   Widget build() {
-    HookElement.currentContext = this;
+    _stashedContextQueue.add(this);
     var widget = _widget.build();
     didUpdate();
+    _stashedContextQueue.removeLast();
+    updatePhaseEffectQueue.clear();
+    _workInProgressHook = null;
     return widget;
   }
 
@@ -30,9 +33,6 @@ class HookElement extends ComponentElement {
         this.unmountPhaseEffectQueue.add(removalEffectCallback);
       }
     });
-
-    updatePhaseEffectQueue.clear();
-    _workInProgressHook = null;
   }
 
   @override
