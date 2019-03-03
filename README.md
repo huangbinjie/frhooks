@@ -1,5 +1,7 @@
 # Flutter-Hooks
 
+[![Build Status](https://travis-ci.org/huangbinjie/frhooks.svg?branch=master)](https://travis-ci.org/huangbinjie/frhooks)
+
 use react like hooks in flutter.
 
 ## Motivation
