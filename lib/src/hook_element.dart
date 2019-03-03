@@ -7,7 +7,6 @@ class HookElement extends ComponentElement {
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
 
-  /// Creates an element that uses the given widget as its configuration.
   HookElement(HookWidget widget)
       : _widget = widget,
         super(widget);
@@ -16,23 +15,27 @@ class HookElement extends ComponentElement {
 
   @override
   Widget build() {
-    _stashedContextQueue.add(this);
-    var widget = _widget.build();
-    didUpdate();
-    _stashedContextQueue.removeLast();
-    updatePhaseEffectQueue.clear();
-    _workInProgressHook = null;
+    willBuild();
+    final widget = _widget.build();
+    didBuild();
     return widget;
   }
 
-  /// cause of [mount] called before [build]. So create a method [didUpdate] for react like didUpdate.
-  void didUpdate() {
+  void willBuild() {
+    _stashedContextStack.add(this);
+  }
+
+  /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
+  void didBuild() {
     updatePhaseEffectQueue.forEach((callback) {
       var removalEffectCallback = callback();
       if (removalEffectCallback != null) {
         this.unmountPhaseEffectQueue.add(removalEffectCallback);
       }
     });
+
+    updatePhaseEffectQueue.clear();
+    _workInProgressHook = null;
   }
 
   @override
