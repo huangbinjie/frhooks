@@ -1,4 +1,4 @@
-# Flutter-Hooks
+# Flhooks
 
 [![Build Status](https://travis-ci.org/huangbinjie/frhooks.svg?branch=master)](https://travis-ci.org/huangbinjie/frhooks)
 
