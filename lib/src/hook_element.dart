@@ -11,8 +11,6 @@ class HookElement extends ComponentElement {
       : _widget = widget,
         super(widget);
 
-  static HookElement currentContext;
-
   @override
   Widget build() {
     willBuild();
