@@ -30,6 +30,32 @@ void main() {
     expect(stateContainer.state, 1);
   });
 
+  testWidgets("useCallback with varargs function", (tester) async {
+    StateContainer stateContainer;
+    List cbList = [];
+    await tester.pumpWidget(HookBuilder(builder: () {
+      stateContainer = useState(0);
+      final cb = useCallback((int index) {
+        return index;
+      }, []);
+      cbList.add(cb);
+      return Container();
+    },));
+
+    await tester.pump();
+
+    expect(cbList[0](1), 1);
+
+    stateContainer.setState(1);
+
+    await tester.pump();
+
+    expect(cbList[0], cbList[1]);
+
+    expect(cbList[1](2), 2);
+
+  });
+
   testWidgets("same useCallback inputs return first used callback",
       (tester) async {
     List cbList = [];

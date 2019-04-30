@@ -1,6 +1,6 @@
 part of 'hook.dart';
 
-useCallback(dynamic Function() callback, [List<dynamic> deps]) {
+T useCallback<T extends Function>(T callback, [List<dynamic> deps]) {
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memoizedState == null) {
