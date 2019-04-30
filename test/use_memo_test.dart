@@ -28,12 +28,12 @@ void main() {
     expect(stateContainer.state, 1);
   });
 
-  testWidgets("same useMemo inputs return first used callback", (tester) async {
+  testWidgets("same useMemo inputs return first used value", (tester) async {
     List<Map<String, dynamic>> memorizedStates = [];
     StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
-      final memorizedState = useMemo({"n": 1});
+      final memorizedState = useMemo({"n": 1}, []);
       memorizedStates.add(memorizedState);
       return Container();
     }));
@@ -45,12 +45,12 @@ void main() {
     expect(memorizedStates[0] == memorizedStates[1], true);
   });
 
-  testWidgets("useMemo changing inputs return new callback", (tester) async {
+  testWidgets("useMemo changing inputs return new value", (tester) async {
     List memorizedStates = [];
     StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
-      final memorizedState = useMemo({"n": 1});
+      final memorizedState = useMemo({"n": 1}, [stateContainer.state]);
       memorizedStates.add(memorizedState);
       return Container();
     }));
