@@ -49,7 +49,7 @@ class MyWidget extends HookWidget {
 }
 ```
 
-## useCallback
+## useCallback & useMemo
 
 ```dart
 class MyWidget extends HookWidget {
