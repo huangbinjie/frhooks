@@ -23,7 +23,6 @@ HookElement _resolveCurrentContext() {
 
 Hook _createWorkInProgressHook() {
   var currentContext = _resolveCurrentContext();
-  _workInProgressHook = currentContext.hook;
 
   if (_workInProgressHook == null) {
     _workInProgressHook = currentContext.hook;
