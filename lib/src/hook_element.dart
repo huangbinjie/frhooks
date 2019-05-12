@@ -1,22 +1,19 @@
 part of './hook.dart';
 
 class HookElement extends StatelessElement {
-  HookWidget _widget;
   Hook hook = Hook();
 
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
 
-  HookElement(HookWidget widget)
-      : _widget = widget,
-        super(widget);
+  HookElement(HookWidget widget) : super(widget);
 
   @override
   Widget build() {
     willBuild();
-    final widget = _widget.build(this);
+    final child = super.build();
     didBuild();
-    return widget;
+    return child;
   }
 
   void willBuild() {
@@ -44,7 +41,7 @@ class HookElement extends StatelessElement {
   }
 
   @override
-  void update(Widget newWidget) {
+  void update(HookWidget newWidget) {
     super.update(newWidget);
   }
 }
