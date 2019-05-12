@@ -1,6 +1,6 @@
 part of './hook.dart';
 
-class HookElement extends ComponentElement {
+class HookElement extends StatelessElement {
   HookWidget _widget;
   Hook hook = Hook();
 
@@ -14,7 +14,7 @@ class HookElement extends ComponentElement {
   @override
   Widget build() {
     willBuild();
-    final widget = _widget.build();
+    final widget = _widget.build(this);
     didBuild();
     return widget;
   }

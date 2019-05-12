@@ -1,6 +1,6 @@
 part of './hook.dart';
 
-abstract class HookWidget extends Widget {
+abstract class HookWidget extends StatelessWidget {
   const HookWidget({Key key}) : super(key: key);
 
   @override
@@ -8,5 +8,5 @@ abstract class HookWidget extends Widget {
     return HookElement(this);
   }
 
-  Widget build();
+  Widget build(BuildContext context);
 }
