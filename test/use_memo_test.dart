@@ -8,7 +8,7 @@ void main() {
     List<Map<String, dynamic>> memorizedStates = [];
     StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
-      final memorizedState = useMemo({"n": 1});
+      final memorizedState = useMemo(() => {"n": 1});
       stateContainer = useState(0);
       memorizedStates.add(memorizedState);
       return Container();
@@ -33,7 +33,7 @@ void main() {
     StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
-      final memorizedState = useMemo({"n": 1}, []);
+      final memorizedState = useMemo(() => {"n": 1}, []);
       memorizedStates.add(memorizedState);
       return Container();
     }));
@@ -50,7 +50,7 @@ void main() {
     StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
-      final memorizedState = useMemo({"n": 1}, [stateContainer.state]);
+      final memorizedState = useMemo(() => {"n": 1}, [stateContainer.state]);
       memorizedStates.add(memorizedState);
       return Container();
     }));

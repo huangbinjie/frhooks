@@ -49,17 +49,27 @@ class MyWidget extends HookWidget {
 }
 ```
 
-## useCallback & useMemo
+## useCallback
 
 ```dart
 class MyWidget extends HookWidget {
   Widget build() {
     var callback = useCallback(() {
       return 1
-    })
+    }, [])
     // result == 1
     var result = callback()
     return Container()
   }
 }
 ```
+
+## useMemo
+
+```dart
+class MyWidget extends HookWidget {
+  Widget build() {
+    var c = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+    return Container()
+  }
+}
