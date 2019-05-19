@@ -44,4 +44,10 @@ class HookElement extends StatelessElement {
   void update(HookWidget newWidget) {
     super.update(newWidget);
   }
+
+  @override
+  void reassemble() {
+    hook = Hook();
+    super.reassemble();
+  }
 }
