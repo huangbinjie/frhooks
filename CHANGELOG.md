@@ -12,3 +12,7 @@ fix: update can rebuild widget correctly.
 ## 1.2.2
 
 feature: useMemo receive a thunk to lazy compute.
+
+## 1.2.3
+
+feature: hotload will reset hook in Element.
