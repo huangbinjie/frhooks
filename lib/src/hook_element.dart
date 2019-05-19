@@ -25,7 +25,7 @@ class HookElement extends StatelessElement {
     updatePhaseEffectQueue.forEach((callback) {
       var removalEffectCallback = callback();
       if (removalEffectCallback != null) {
-        this.unmountPhaseEffectQueue.add(removalEffectCallback);
+        unmountPhaseEffectQueue.add(removalEffectCallback);
       }
     });
 
@@ -35,8 +35,8 @@ class HookElement extends StatelessElement {
 
   @override
   void unmount() {
-    this.unmountPhaseEffectQueue.forEach((callback) => callback());
-    this.unmountPhaseEffectQueue.clear();
+    unmountPhaseEffectQueue.forEach((callback) => callback());
+    unmountPhaseEffectQueue.clear();
     super.unmount();
   }
 
@@ -48,6 +48,9 @@ class HookElement extends StatelessElement {
   @override
   void reassemble() {
     hook = Hook();
+    updatePhaseEffectQueue.clear();
+    unmountPhaseEffectQueue.forEach((callback) => callback());
+    unmountPhaseEffectQueue.clear();
     super.reassemble();
   }
 }

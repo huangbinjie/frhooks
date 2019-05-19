@@ -16,3 +16,7 @@ feature: useMemo receive a thunk to lazy compute.
 ## 1.2.3
 
 feature: hotload will reset hook in Element.
+
+## 1.2.4
+
+fix: reassemble will clear effect.
