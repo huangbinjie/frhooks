@@ -20,3 +20,7 @@ feature: hotload will reset hook in Element.
 ## 1.2.4
 
 fix: reassemble will clear effect.
+
+# 1.2.5
+
+feature: if you insert or remove a hook in your build method, frhooks will rerun the build method and drop the memorized state. 
