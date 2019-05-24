@@ -1,9 +1,12 @@
 part of './hook.dart';
 
+class _HookTypeError extends Error {}
+
 class HookElement extends StatelessElement {
   Hook hook = Hook();
   int prevHooksLength = 0;
   int currentHooksLength = 0;
+  bool _built = false;
 
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
@@ -20,12 +23,24 @@ class HookElement extends StatelessElement {
   @override
   Widget build() {
     willBuild();
-    final child = super.build();
-    if (prevHooksLength == 0 || currentHooksLength == prevHooksLength) {
+    Widget child;
+    try {
+      child = super.build();
+    } catch (e) {
+      if (e is _HookTypeError) {
+        debugPrint(
+            "Seems you have inserted/removed a hook, hooks will rerun the build of ${widget}");
+        resetHooks();
+        return build();
+      } else {
+        throw e;
+      }
+    }
+    if (_built == false || currentHooksLength == prevHooksLength) {
       didBuild();
     } else {
       debugPrint(
-          "Seems you have inserted/removed a hook, hooks will rerun the build of your widget ${widget}");
+          "Seems you have inserted/removed a hook, hooks will rerun the build of ${widget}");
       resetHooks();
       return build();
     }
@@ -49,6 +64,7 @@ class HookElement extends StatelessElement {
     updatePhaseEffectQueue.clear();
     _workInProgressHook = null;
     prevHooksLength = currentHooksLength;
+    _built = true;
   }
 
   @override

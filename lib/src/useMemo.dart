@@ -2,22 +2,25 @@ part of 'hook.dart';
 
 T useMemo<T>(T Function() returnMemorizedState, [List<dynamic> deps]) {
   _workInProgressHook = _createWorkInProgressHook();
+  var memorizedState = _workInProgressHook.memorizedState;
 
-  if (_workInProgressHook.memoizedState == null) {
-    _workInProgressHook.memoizedState = {
-      "memorizedState": returnMemorizedState(),
+  if (memorizedState == null) {
+    _workInProgressHook.memorizedState = {
+      "state": returnMemorizedState(),
       "deps": deps
     };
   } else {
-    var memoizedState = _workInProgressHook.memoizedState;
-
-    if (!areHookInputsEqual(memoizedState["deps"], deps)) {
-      _workInProgressHook.memoizedState = {
-        "memorizedState": returnMemorizedState(),
-        "deps": deps
-      };
+    if (memorizedState["state"] is T) {
+      if (!areHookInputsEqual(memorizedState["deps"], deps)) {
+        _workInProgressHook.memorizedState = {
+          "state": returnMemorizedState(),
+          "deps": deps
+        };
+      }
+    } else {
+      throw _HookTypeError();
     }
   }
 
-  return _workInProgressHook.memoizedState["memorizedState"];
+  return memorizedState["state"];
 }
