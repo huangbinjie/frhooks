@@ -6,21 +6,21 @@ T useMemo<T>(T Function() returnMemorizedState, [List<dynamic> deps]) {
 
   if (memorizedState == null) {
     _workInProgressHook.memorizedState = {
-      "memorizedState": returnMemorizedState(),
+      "state": returnMemorizedState(),
       "deps": deps
     };
   } else {
-    if (!areHookInputsEqual(memorizedState["deps"], deps)) {
-      _workInProgressHook.memorizedState = {
-        "memorizedState": returnMemorizedState(),
-        "deps": deps
-      };
+    if (memorizedState["state"] is T) {
+      if (!areHookInputsEqual(memorizedState["deps"], deps)) {
+        _workInProgressHook.memorizedState = {
+          "state": returnMemorizedState(),
+          "deps": deps
+        };
+      }
+    } else {
+      throw _HookTypeError();
     }
   }
 
-  if (memorizedState["memorizedState"] is T) {
-    return memorizedState["memorizedState"];
-  } else {
-    throw _HookTypeError();
-  }
+  return memorizedState["state"];
 }
