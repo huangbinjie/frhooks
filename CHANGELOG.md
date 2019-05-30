@@ -24,3 +24,7 @@ fix: reassemble will clear effect.
 # 1.2.5
 
 feature: if you insert or remove a hook in your build method, frhooks will rerun the build method and drop the memorized state. 
+
+# 1.2.6
+
+fix: frhooks can rerun your hooks correctly after insert or remove one hook.
