@@ -13,11 +13,20 @@ class HookElement extends StatelessElement {
 
   HookElement(HookWidget widget) : super(widget);
 
-  void resetHooks() {
+  Widget resetHooksAndReBuild() {
     hook = Hook();
+    _built = false;
+    prevHooksLength = 0;
+    currentHooksLength = 0;
+    _workInProgressHook = null;
     updatePhaseEffectQueue.clear();
     unmountPhaseEffectQueue.forEach((callback) => callback());
     unmountPhaseEffectQueue.clear();
+
+    debugPrint(
+        "Seems you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}");
+
+    return build();
   }
 
   @override
@@ -28,21 +37,17 @@ class HookElement extends StatelessElement {
       child = super.build();
     } catch (e) {
       if (e is _HookTypeError) {
-        debugPrint(
-            "Seems you have inserted/removed a hook, hooks will rerun the build of ${widget}");
-        resetHooks();
-        return build();
+        return resetHooksAndReBuild();
       } else {
         throw e;
       }
     }
+
+    /// Type is correct, but length changed(append hook to last);
     if (_built == false || currentHooksLength == prevHooksLength) {
       didBuild();
     } else {
-      debugPrint(
-          "Seems you have inserted/removed a hook, hooks will rerun the build of ${widget}");
-      resetHooks();
-      return build();
+      return resetHooksAndReBuild();
     }
     return child;
   }
