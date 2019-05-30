@@ -16,14 +16,13 @@ _genSetState(currentContext, currentHook) {
 
 StateContainer<T> useState<T>([T initialState]) {
   _workInProgressHook = _createWorkInProgressHook();
-  var memorizedState = _workInProgressHook.memorizedState;
 
-  if (memorizedState == null) {
+  if (_workInProgressHook.memorizedState == null) {
     _workInProgressHook.memorizedState = initialState;
   }
 
-  if (memorizedState is T) {
-    return StateContainer(memorizedState,
+  if (_workInProgressHook.memorizedState is T) {
+    return StateContainer(_workInProgressHook.memorizedState,
         _genSetState(_resolveCurrentContext(), _workInProgressHook));
   } else {
     throw _HookTypeError();
