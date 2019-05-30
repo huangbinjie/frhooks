@@ -1,33 +1,53 @@
 part of './hook.dart';
 
+class _HookTypeError extends Error {}
+
 class HookElement extends StatelessElement {
   Hook hook = Hook();
   int prevHooksLength = 0;
   int currentHooksLength = 0;
+  bool _built = false;
 
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
 
   HookElement(HookWidget widget) : super(widget);
 
-  void resetHooks() {
+  Widget resetHooksAndReBuild() {
     hook = Hook();
+    _built = false;
+    prevHooksLength = 0;
+    currentHooksLength = 0;
+    _workInProgressHook = null;
     updatePhaseEffectQueue.clear();
     unmountPhaseEffectQueue.forEach((callback) => callback());
     unmountPhaseEffectQueue.clear();
+
+    debugPrint(
+        "Seems you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}");
+
+    return build();
   }
 
   @override
   Widget build() {
     willBuild();
-    final child = super.build();
-    if (prevHooksLength == 0 || currentHooksLength == prevHooksLength) {
+    Widget child;
+    try {
+      child = super.build();
+    } catch (e) {
+      if (e is _HookTypeError) {
+        return resetHooksAndReBuild();
+      } else {
+        throw e;
+      }
+    }
+
+    /// Type is correct, but length changed(append hook to last);
+    if (_built == false || currentHooksLength == prevHooksLength) {
       didBuild();
     } else {
-      debugPrint(
-          "Seems you have inserted/removed a hook, hooks will rerun the build of your widget ${widget}");
-      resetHooks();
-      return build();
+      return resetHooksAndReBuild();
     }
     return child;
   }
@@ -49,6 +69,7 @@ class HookElement extends StatelessElement {
     updatePhaseEffectQueue.clear();
     _workInProgressHook = null;
     prevHooksLength = currentHooksLength;
+    _built = true;
   }
 
   @override

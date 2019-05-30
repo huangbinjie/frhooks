@@ -16,33 +16,48 @@ void main() {
         builtTime += 1;
         element = useContext();
         firstStateContainer = useState(0);
-        if (firstStateContainer.state == 0) {
-          secondStateContainer = useState(builtTime == 1 ? "one" : "two");
+        if (builtTime == 1) {
+          secondStateContainer = useState("some value");
         } else {
           secondStateContainer = null;
         }
-        memorizedState = useMemo(() => firstStateContainer.state, []);
+        memorizedState = useMemo(
+            () => firstStateContainer.state, [firstStateContainer.state]);
+        useCallback(() {});
         return Container();
       },
     ));
 
     await tester.pump();
 
-    // useContext doesn't increase currentHooksLength.
-    expect(element.currentHooksLength, 3);
+    /// useContext doesn't increase currentHooksLength.
+    /// firstStateContainer + secondStateContainer + memorizedState + useCallback = 4
+    expect(element.currentHooksLength, 4);
     expect(memorizedState, 0);
     expect(builtTime, 1);
-    expect(secondStateContainer.state, "one");
+    expect(secondStateContainer.state, "some value");
 
-    builtTime = 0;
+    builtTime = 1;
 
-    firstStateContainer.setState(1);
+    element.markNeedsBuild();
 
     await tester.pump();
 
     expect(element.currentHooksLength, 3);
     expect(memorizedState, 0);
-    expect(builtTime, 2);
-    expect(secondStateContainer.state, "two");
+
+    /// builtTime = 1, markNeedsBuild + 1, hook rerun + 1
+    expect(builtTime, 3);
+
+    /// builtTime = 2, builtTime = 3
+    expect(secondStateContainer, null);
+
+    firstStateContainer.setState(2);
+
+    await tester.pump();
+
+    expect(builtTime, 4);
+
+    expect(memorizedState, 2);
   });
 }

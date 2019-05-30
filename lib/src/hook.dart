@@ -9,8 +9,7 @@ part './hook_widget.dart';
 part 'hook_element.dart';
 
 class Hook {
-  dynamic baseState;
-  dynamic memoizedState;
+  dynamic memorizedState;
   Hook next;
 }
 

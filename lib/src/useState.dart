@@ -9,7 +9,7 @@ class StateContainer<T> {
 
 _genSetState(currentContext, currentHook) {
   return (nextState) {
-    currentHook.baseState = nextState;
+    currentHook.memorizedState = nextState;
     currentContext.markNeedsBuild();
   };
 }
@@ -17,10 +17,14 @@ _genSetState(currentContext, currentHook) {
 StateContainer<T> useState<T>([T initialState]) {
   _workInProgressHook = _createWorkInProgressHook();
 
-  if (_workInProgressHook.baseState == null) {
-    _workInProgressHook.baseState = initialState;
+  if (_workInProgressHook.memorizedState == null) {
+    _workInProgressHook.memorizedState = initialState;
   }
 
-  return StateContainer(_workInProgressHook.baseState,
-      _genSetState(_resolveCurrentContext(), _workInProgressHook));
+  if (_workInProgressHook.memorizedState is T) {
+    return StateContainer(_workInProgressHook.memorizedState,
+        _genSetState(_resolveCurrentContext(), _workInProgressHook));
+  } else {
+    throw _HookTypeError();
+  }
 }
