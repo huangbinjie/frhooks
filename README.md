@@ -13,7 +13,7 @@ Have the same thinking of the [flutter_hooks motivation](https://github.com/rrou
 
 ```dart
 class MyWidget extends HookWidget {
-  Widget build() {
+  Widget build(BuildContext context) {
     BuildContext context = useContext() 
     return Container()
   }
@@ -24,7 +24,7 @@ class MyWidget extends HookWidget {
 
 ```dart
 class MyWidget extends HookWidget {
-  Widget build() {
+  Widget build(BuildContext context) {
     StateContainer result = useState(0)
     // result.state
     // result.setState
@@ -37,7 +37,7 @@ class MyWidget extends HookWidget {
 
 ```dart
 class MyWidget extends HookWidget {
-  Widget build() {
+  Widget build(BuildContext context) {
     useEffect(() {
       // do effect here.
       return () {
@@ -53,7 +53,7 @@ class MyWidget extends HookWidget {
 
 ```dart
 class MyWidget extends HookWidget {
-  Widget build() {
+  Widget build(BuildContext context) {
     var callback = useCallback(() {
       return 1
     }, [])
@@ -68,7 +68,7 @@ class MyWidget extends HookWidget {
 
 ```dart
 class MyWidget extends HookWidget {
-  Widget build() {
+  Widget build(BuildContext context) {
     var c = useMemo(() => computeExpensiveValue(a, b), [a, b]);
     return Container()
   }
