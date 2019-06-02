@@ -6,7 +6,6 @@ class HookElement extends StatelessElement {
   Hook hook = Hook();
   int prevHooksLength = 0;
   int currentHooksLength = 0;
-  bool _built = false;
 
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
@@ -15,7 +14,6 @@ class HookElement extends StatelessElement {
 
   Widget resetHooksAndReBuild() {
     hook = Hook();
-    _built = false;
     prevHooksLength = 0;
     currentHooksLength = 0;
     _workInProgressHook = null;
@@ -32,9 +30,8 @@ class HookElement extends StatelessElement {
   @override
   Widget build() {
     willBuild();
-    Widget child;
     try {
-      child = super.build();
+      return super.build();
     } catch (e) {
       if (e is _HookTypeError) {
         return resetHooksAndReBuild();
@@ -42,14 +39,6 @@ class HookElement extends StatelessElement {
         throw e;
       }
     }
-
-    /// Type is correct, but length changed(append hook to last);
-    if (_built == false || currentHooksLength == prevHooksLength) {
-      didBuild();
-    } else {
-      return resetHooksAndReBuild();
-    }
-    return child;
   }
 
   void willBuild() {
@@ -69,7 +58,12 @@ class HookElement extends StatelessElement {
     updatePhaseEffectQueue.clear();
     _workInProgressHook = null;
     prevHooksLength = currentHooksLength;
-    _built = true;
+  }
+
+  /// Called after every relayout.
+  void _postFrameCallback(_) {
+    didBuild();
+    WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
   }
 
   @override
@@ -77,6 +71,12 @@ class HookElement extends StatelessElement {
     unmountPhaseEffectQueue.forEach((callback) => callback());
     unmountPhaseEffectQueue.clear();
     super.unmount();
+  }
+
+  @override
+  void mount(parent, newSlot) {
+    WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
+    super.mount(parent, newSlot);
   }
 
   @override

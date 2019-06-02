@@ -28,3 +28,7 @@ feature: if you insert or remove a hook in your build method, frhooks will rerun
 # 1.2.6
 
 fix: frhooks can rerun your hooks correctly after insert or remove one hook.
+
+# 1.2.7
+
+fix: use addPostFrameCallback instead of manual calling didBuild in build.

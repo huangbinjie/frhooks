@@ -9,8 +9,13 @@ void main() {
 
     await tester.pumpWidget(HookBuilder(
       builder: () {
+        final context = useContext();
         useEffect(() {
           effectResult = 1;
+
+          /// context.size can not be read during rebuild or relayout.
+          /// this expect this callback should be call after relayout completely.
+          expect(context.size, Size(800, 600));
         });
         return Container();
       },
