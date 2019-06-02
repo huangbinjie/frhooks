@@ -32,3 +32,7 @@ fix: frhooks can rerun your hooks correctly after insert or remove one hook.
 # 1.2.7
 
 fix: use addPostFrameCallback instead of manual calling didBuild in build.
+
+# 1.2.8
+
+fix: move addPostFrameCallback into willBuild & clean unnecessary variables(currentHookLength & prevHookLength).
