@@ -4,8 +4,6 @@ class _HookTypeError extends Error {}
 
 class HookElement extends StatelessElement {
   Hook hook = Hook();
-  int prevHooksLength = 0;
-  int currentHooksLength = 0;
 
   List<void Function() Function()> updatePhaseEffectQueue = [];
   List<void Function()> unmountPhaseEffectQueue = [];
@@ -14,8 +12,6 @@ class HookElement extends StatelessElement {
 
   Widget resetHooksAndReBuild() {
     hook = Hook();
-    prevHooksLength = 0;
-    currentHooksLength = 0;
     _workInProgressHook = null;
     updatePhaseEffectQueue.clear();
     unmountPhaseEffectQueue.forEach((callback) => callback());
@@ -43,11 +39,11 @@ class HookElement extends StatelessElement {
 
   void willBuild() {
     _stashedContextStack.add(this);
-    currentHooksLength = 0;
+    WidgetsBinding.instance.addPostFrameCallback(didBuild);
   }
 
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
-  void didBuild() {
+  void didBuild(Duration duration) {
     updatePhaseEffectQueue.forEach((callback) {
       var removalEffectCallback = callback();
       if (removalEffectCallback != null) {
@@ -57,13 +53,6 @@ class HookElement extends StatelessElement {
 
     updatePhaseEffectQueue.clear();
     _workInProgressHook = null;
-    prevHooksLength = currentHooksLength;
-  }
-
-  /// Called after every relayout.
-  void _postFrameCallback(_) {
-    didBuild();
-    WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
   }
 
   @override
@@ -75,7 +64,6 @@ class HookElement extends StatelessElement {
 
   @override
   void mount(parent, newSlot) {
-    WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
     super.mount(parent, newSlot);
   }
 

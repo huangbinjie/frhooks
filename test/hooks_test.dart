@@ -30,9 +30,6 @@ void main() {
 
     await tester.pump();
 
-    /// useContext doesn't increase currentHooksLength.
-    /// firstStateContainer + secondStateContainer + memorizedState + useCallback = 4
-    expect(element.currentHooksLength, 4);
     expect(memorizedState, 0);
     expect(builtTime, 1);
     expect(secondStateContainer.state, "some value");
@@ -43,7 +40,6 @@ void main() {
 
     await tester.pump();
 
-    expect(element.currentHooksLength, 3);
     expect(memorizedState, 0);
 
     /// builtTime = 1, markNeedsBuild + 1, hook rerun + 1
