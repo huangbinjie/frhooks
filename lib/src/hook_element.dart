@@ -39,6 +39,7 @@ class HookElement extends StatelessElement {
 
   void willBuild() {
     _stashedContextStack.add(this);
+    _workInProgressHook = null;
     WidgetsBinding.instance.addPostFrameCallback(didBuild);
   }
 
@@ -52,11 +53,11 @@ class HookElement extends StatelessElement {
     });
 
     updatePhaseEffectQueue.clear();
-    _workInProgressHook = null;
   }
 
   @override
   void unmount() {
+    _workInProgressHook = null;
     unmountPhaseEffectQueue.forEach((callback) => callback());
     unmountPhaseEffectQueue.clear();
     super.unmount();
