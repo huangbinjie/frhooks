@@ -36,3 +36,7 @@ fix: use addPostFrameCallback instead of manual calling didBuild in build.
 # 1.2.8
 
 fix: move addPostFrameCallback into willBuild & clean unnecessary variables(currentHookLength & prevHookLength).
+
+# 1.2.9
+
+fix: move `_workInProgressHook = null;` into `willBuild`.
