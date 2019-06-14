@@ -73,3 +73,16 @@ class MyWidget extends HookWidget {
     return Container()
   }
 }
+```
+
+## useRef
+
+```dart
+class MyWidget extends HookWidget {
+  Widget build(BuildContext context) {
+    final ref = useRef();
+    // free to set and read ref.current
+    return Container()
+  }
+}
+```

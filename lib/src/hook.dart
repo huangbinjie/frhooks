@@ -5,6 +5,7 @@ part 'useState.dart';
 part 'useEffect.dart';
 part 'useCallback.dart';
 part 'useMemo.dart';
+part 'useRef.dart';
 part './hook_widget.dart';
 part 'hook_element.dart';
 

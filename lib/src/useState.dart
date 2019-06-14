@@ -14,7 +14,7 @@ _genSetState(currentContext, currentHook) {
   };
 }
 
-StateContainer<T> useState<T>([T initialState]) {
+StateContainer<T> useState<T>(T initialState) {
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memorizedState == null) {

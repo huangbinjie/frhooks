@@ -40,3 +40,7 @@ fix: move addPostFrameCallback into willBuild & clean unnecessary variables(curr
 # 1.2.9
 
 fix: move `_workInProgressHook = null;` into `willBuild`.
+
+# 1.3.0
+
+feature: new hooks `useRef`.
