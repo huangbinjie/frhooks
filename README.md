@@ -86,3 +86,15 @@ class MyWidget extends HookWidget {
   }
 }
 ```
+
+## useAnimationController
+
+```dart
+class MyWidget extends HookWidget {
+  Widget build(BuildContext context) {
+    final controller = useAnimationController();
+    // controller.forward()
+    return Container()
+  }
+}
+```

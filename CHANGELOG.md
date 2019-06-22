@@ -44,3 +44,6 @@ fix: move `_workInProgressHook = null;` into `willBuild`.
 # 1.3.0
 
 feature: new hooks `useRef`.
+feature: new hooks `useAnimationController`.
+
+

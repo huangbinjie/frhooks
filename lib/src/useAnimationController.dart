@@ -2,9 +2,14 @@ part of 'hook.dart';
 
 class _SingleTickerProvider implements TickerProvider {
   Ticker ticker;
+  BuildContext context;
+
+  _SingleTickerProvider(this.context);
+
   @override
   Ticker createTicker(onTick) {
-    ticker = Ticker(onTick, debugLabel: kDebugMode ? 'created by $this' : null);
+    ticker = Ticker(onTick,
+        debugLabel: kDebugMode ? 'created by ${context.widget}' : null);
     return ticker;
   }
 }
@@ -19,7 +24,8 @@ AnimationController useAnimationController({
   AnimationBehavior animationBehavior,
 }) {
   final context = useContext();
-  final singleTickerProvider = useMemo(() => _SingleTickerProvider(), []);
+  final singleTickerProvider =
+      useMemo(() => _SingleTickerProvider(context), []);
   final animationController = useMemo(
       () => AnimationController(
           value: value,
@@ -43,7 +49,7 @@ AnimationController useAnimationController({
         throw FlutterError(
             '${context.widget} was disposed with an active Ticker.\n'
             '${context.widget} created a Ticker via useAnimationController, but at the time '
-            'dispose() was called on the function, that Ticker was still active. The Ticker must '
+            'clean effect was called on the useEffect, that Ticker was still active. The Ticker must '
             'be disposed before unmount. Tickers used by AnimationControllers '
             'should be disposed by calling dispose() on the AnimationController itself. '
             'Otherwise, the ticker will leak.\n'

@@ -5,15 +5,11 @@ import './hook_builder.dart';
 
 void main() {
   testWidgets("useRef basic", (tester) async {
-    RefContainer ref;
+    RefContainer<int> ref;
     StateContainer state;
     await tester.pumpWidget(HookBuilder(builder: () {
-      ref = useRef();
+      ref = useRef(0);
       state = useState(0);
-
-      useEffect(() {
-        ref.current = 0;
-      }, []);
 
       useEffect(() {
         ref.current += 1;

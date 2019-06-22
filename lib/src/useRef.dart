@@ -1,7 +1,7 @@
 part of 'hook.dart';
 
 class RefContainer<T> {
-  dynamic current;
+  T current;
   RefContainer(this.current);
 }
 
