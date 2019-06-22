@@ -1,12 +1,16 @@
-import './are_hook_inputs_equal.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/material.dart';
+import 'are_hook_inputs_equal.dart';
+
 part 'useContext.dart';
 part 'useState.dart';
 part 'useEffect.dart';
 part 'useCallback.dart';
 part 'useMemo.dart';
 part 'useRef.dart';
-part './hook_widget.dart';
+part 'useAnimationController.dart';
+part 'hook_widget.dart';
 part 'hook_element.dart';
 
 class Hook {
