@@ -9,6 +9,7 @@ part 'useEffect.dart';
 part 'useCallback.dart';
 part 'useMemo.dart';
 part 'useRef.dart';
+part 'useTickerProvider.dart';
 part 'useAnimationController.dart';
 part 'hook_widget.dart';
 part 'hook_element.dart';

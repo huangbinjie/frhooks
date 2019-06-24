@@ -17,7 +17,10 @@ void tick(Duration duration) {
 }
 
 void main() {
-  testWidgets("Basic", (tester) async {
+  // TODO：Test with TickerMode
+
+  testWidgets("Remove before animation finished should throw error",
+      (tester) async {
     AnimationController controller;
     await tester.pumpWidget(HookBuilder(builder: () {
       controller = useAnimationController(duration: Duration(seconds: 1));
