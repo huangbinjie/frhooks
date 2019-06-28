@@ -5,7 +5,9 @@ class _HookTypeError extends Error {}
 class HookElement extends StatelessElement {
   Hook hook = Hook();
 
-  List<void Function() Function()> updatePhaseEffectQueue = [];
+  // List<void Function() Function() | Future<void Function() Function()>
+  List<dynamic Function()> updatePhaseEffectQueue = [];
+
   List<void Function()> unmountPhaseEffectQueue = [];
 
   HookElement(HookWidget widget) : super(widget);
@@ -46,9 +48,17 @@ class HookElement extends StatelessElement {
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
     updatePhaseEffectQueue.forEach((callback) {
-      var removalEffectCallback = callback();
-      if (removalEffectCallback != null) {
-        unmountPhaseEffectQueue.add(removalEffectCallback);
+      var removeEffectCallback = callback();
+      if (removeEffectCallback != null) {
+        if (removeEffectCallback is Future) {
+          removeEffectCallback.then((cb) {
+            if (cb != null) {
+              unmountPhaseEffectQueue.add(cb);
+            }
+          });
+        } else {
+          unmountPhaseEffectQueue.add(removeEffectCallback);
+        }
       }
     });
 

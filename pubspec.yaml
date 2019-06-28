@@ -5,7 +5,7 @@ homepage: https://github.com/huangbinjie/frhooks
 author: 黄斌杰 <akira.binjie@gmail.com>
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
   flutter:

@@ -101,4 +101,19 @@ void main() {
 
     expect(effectResult, 0);
   });
+
+  testWidgets('useAsyncEffect basic', (tester) async {
+    int effectResult = 0;
+
+    await tester.pumpWidget(HookBuilder(
+      builder: () {
+        useAsyncEffect(() async {
+          effectResult = await Future.value(1);
+        });
+        return Container();
+      },
+    ));
+
+    expect(effectResult, 1);
+  });
 }
