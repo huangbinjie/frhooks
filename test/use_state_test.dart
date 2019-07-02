@@ -45,6 +45,25 @@ void main() {
     expect(element.dirty, false);
   });
 
+  testWidgets("useState should return same the reference of StateContainer .",
+      (tester) async {
+    List<StateContainer<int>> stateContainers = [];
+    HookElement context;
+    await tester.pumpWidget(HookBuilder(builder: () {
+      context = useContext();
+      stateContainers.add(useState(1));
+      return Container();
+    }));
+
+    await tester.pump();
+
+    context.markNeedsBuild();
+
+    await tester.pump();
+
+    expect(stateContainers[0], stateContainers[1]);
+  });
+
   testWidgets("build widget before useState", (tester) async {
     StateContainer<int> stateContainer;
     StateContainer<String> childStateContainer;

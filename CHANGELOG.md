@@ -43,7 +43,15 @@ fix: move `_workInProgressHook = null;` into `willBuild`.
 
 # 1.3.0
 
-feature: new hooks `useRef`.
-feature: new hooks `useAnimationController`.
+feature: new hook `useRef`.
+feature: new hook `useAnimationController`.
+
+# 1.3.1
+
+Fix: useState does not return same object.
+Feature: new hook useAsyncEffect.
+Feature: new hook useTickerProvider.
+
+
 
 
