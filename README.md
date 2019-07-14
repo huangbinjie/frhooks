@@ -98,3 +98,22 @@ class MyWidget extends HookWidget {
   }
 }
 ```
+
+# Mixins
+
+Frhooks aims to replace `State` completely, also include mixins.
+
+## HookAutomaticKeepAliveClientMixin
+
+Hook version of [AutomaticKeepAliveClientMixin](https://api.flutter.dev/flutter/widgets/AutomaticKeepAliveClientMixin-mixin.html).
+
+```dart
+class MyWidget extends HookWidget with HookAutomaticKeepAliveClientMixin {
+  get wantKeepAlive => true;
+
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Container();
+  }
+}
+```
