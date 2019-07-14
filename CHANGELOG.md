@@ -52,6 +52,10 @@ Fix: useState does not return same object.
 Feature: new hook useAsyncEffect.
 Feature: new hook useTickerProvider.
 
+# 1.4.0
+
+Feature: an experimental feature `HookAutomaticKeepAliveClientMixin` added to support mixin on HookWidget.
+
 
 
 
