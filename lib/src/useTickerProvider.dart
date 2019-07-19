@@ -8,23 +8,6 @@ TickerProvider useTickerProvider() {
     tickerProvider.ticker.muted = !TickerMode.of(context);
   }
 
-  useEffect(() {
-    return () {
-      assert(() {
-        if (tickerProvider.ticker == null || !tickerProvider.ticker.isActive)
-          return true;
-        throw FlutterError(
-            '${context.widget} was disposed with an active Ticker.\n'
-            '${context.widget} created a Ticker via useTicker or useAnimationController, but at the time '
-            'clean effect was called on the useEffect, that Ticker was still active. The Ticker must '
-            'be disposed before unmount. Tickers used by AnimationControllers '
-            'should be disposed by calling dispose() on the AnimationController itself. '
-            'Otherwise, the ticker will leak.\n'
-            'The offending ticker was: ${tickerProvider.ticker.toString(debugIncludeStack: true)}');
-      }());
-    };
-  }, []);
-
   return tickerProvider;
 }
 

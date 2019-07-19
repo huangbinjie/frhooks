@@ -56,6 +56,9 @@ Feature: new hook useTickerProvider.
 
 Feature: an experimental feature `HookAutomaticKeepAliveClientMixin` added to support mixin on HookWidget.
 
+# 1.4.1
+
+Feature: useAnimationController will auto dispose.
 
 
 

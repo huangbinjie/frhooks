@@ -1,5 +1,6 @@
 part of 'hook.dart';
 
+/// No need to call dispose() on AnimationController manually, this hook will auto dispose for you.
 AnimationController useAnimationController(
     {double value,
     Duration duration,
@@ -21,6 +22,12 @@ AnimationController useAnimationController(
           animationBehavior: animationBehavior,
           vsync: tickerProvider),
       []);
+
+  useEffect(() {
+    return () {
+      animationController.dispose();
+    };
+  }, []);
 
   return animationController;
 }
