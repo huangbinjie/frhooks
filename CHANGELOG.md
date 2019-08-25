@@ -60,5 +60,6 @@ Feature: an experimental feature `HookAutomaticKeepAliveClientMixin` added to su
 
 Feature: useAnimationController will auto dispose.
 
+# 1.4.2
 
-
+Fix: useEffect can memorize changed deps right now.

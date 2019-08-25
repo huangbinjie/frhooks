@@ -10,9 +10,9 @@ useEffect(void Function() Function() effectCallback, [List<dynamic> deps]) {
   } else {
     var prevDeps = _workInProgressHook.memorizedState;
 
-    if (areHookInputsEqual(prevDeps, deps)) {
+    // if dependencies changed, should memorize changed dependencies.
+    if (!areHookInputsEqual(prevDeps, deps)) {
       _workInProgressHook.memorizedState = deps;
-    } else {
       currentContext.updatePhaseEffectQueue.add(effectCallback);
     }
   }
@@ -29,9 +29,8 @@ useAsyncEffect(Future<void Function()> Function() effectCallback,
   } else {
     var prevDeps = _workInProgressHook.memorizedState;
 
-    if (areHookInputsEqual(prevDeps, deps)) {
+    if (!areHookInputsEqual(prevDeps, deps)) {
       _workInProgressHook.memorizedState = deps;
-    } else {
       currentContext.updatePhaseEffectQueue.add(effectCallback);
     }
   }
