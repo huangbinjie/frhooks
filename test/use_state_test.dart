@@ -93,4 +93,27 @@ void main() {
     expect(childStateContainer.state, "1");
     expect(renderedNum, 2);
   });
+
+  testWidgets("useState should accept null as parameter.", (tester) async {
+    StateContainer<int> stateContainer;
+    int renderedNum = 0;
+
+    await tester.pumpWidget(HookBuilder(
+      builder: () {
+        renderedNum++;
+        stateContainer = useState<int>(null);
+        return Container();
+      },
+    ));
+
+    expect(stateContainer.state, null);
+    expect(renderedNum, 1);
+
+    stateContainer.setState(1);
+
+    await tester.pump();
+
+    expect(stateContainer.state, 1);
+    expect(renderedNum, 2);
+  });
 }

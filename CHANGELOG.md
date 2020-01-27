@@ -63,3 +63,7 @@ Feature: useAnimationController will auto dispose.
 # 1.4.2
 
 Fix: useEffect can memorize changed deps right now.
+
+# 1.4.3
+
+Fix: Pass null to useState should not cause rerender.
