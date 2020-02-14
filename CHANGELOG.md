@@ -67,3 +67,7 @@ Fix: useEffect can memorize changed deps right now.
 # 1.4.3
 
 Fix: Pass null to useState should not cause rerender.
+
+# 1.4.4
+
+Fix: clean stashedContext after unmount.

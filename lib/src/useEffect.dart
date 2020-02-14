@@ -1,7 +1,7 @@
 part of 'hook.dart';
 
 useEffect(void Function() Function() effectCallback, [List<dynamic> deps]) {
-  var currentContext = _resolveCurrentContext();
+  var currentContext = _stashedContext;
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memorizedState == null) {
@@ -20,7 +20,7 @@ useEffect(void Function() Function() effectCallback, [List<dynamic> deps]) {
 
 useAsyncEffect(Future<void Function()> Function() effectCallback,
     [List<dynamic> deps]) {
-  var currentContext = _resolveCurrentContext();
+  var currentContext = _stashedContext;
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memorizedState == null) {

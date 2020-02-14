@@ -18,8 +18,8 @@ StateContainer<T> useState<T>(T initialState) {
   _workInProgressHook = _createWorkInProgressHook();
 
   if (_workInProgressHook.memorizedState == null) {
-    _workInProgressHook.memorizedState = StateContainer(initialState,
-        _genSetState(_resolveCurrentContext(), _workInProgressHook));
+    _workInProgressHook.memorizedState = StateContainer(
+        initialState, _genSetState(_stashedContext, _workInProgressHook));
   }
 
   /// Due to Dart allow assign [null] to [T], so null is T should be true.
