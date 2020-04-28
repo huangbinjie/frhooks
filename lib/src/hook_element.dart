@@ -6,18 +6,18 @@ class HookElement extends StatelessElement {
   Hook hook = Hook();
 
   // List<void Function() Function() | Future<void Function() Function()>
-  List<dynamic Function()> updatePhaseEffectQueue = [];
+  List<dynamic Function()> effectQueue = [];
 
-  List<void Function()> unmountPhaseEffectQueue = [];
+  List<void Function()> effectCleanupQueue = [];
 
   HookElement(HookWidget widget) : super(widget);
 
   Widget resetHooksAndReBuild() {
     hook = Hook();
     _workInProgressHook = null;
-    updatePhaseEffectQueue.clear();
-    unmountPhaseEffectQueue.forEach((callback) => callback());
-    unmountPhaseEffectQueue.clear();
+    effectCleanupQueue.forEach((cleanup) => cleanup());
+    effectCleanupQueue.clear();
+    effectQueue.clear();
 
     debugPrint(
         "Seems you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}");
@@ -47,30 +47,33 @@ class HookElement extends StatelessElement {
 
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
-    updatePhaseEffectQueue.forEach((callback) {
-      var removeEffectCallback = callback();
-      if (removeEffectCallback != null) {
-        if (removeEffectCallback is Future) {
-          removeEffectCallback.then((cb) {
+    effectCleanupQueue.forEach((cleanup) => cleanup());
+    effectCleanupQueue.clear();
+
+    effectQueue.forEach((create) {
+      var cleanup = create();
+      if (cleanup != null) {
+        if (cleanup is Future) {
+          cleanup.then((cb) {
             if (cb != null) {
-              unmountPhaseEffectQueue.add(cb);
+              effectCleanupQueue.add(cb);
             }
           });
         } else {
-          unmountPhaseEffectQueue.add(removeEffectCallback);
+          effectCleanupQueue.add(cleanup);
         }
       }
     });
 
-    updatePhaseEffectQueue.clear();
+    effectQueue.clear();
   }
 
   @override
   void unmount() {
     _stashedContext = null;
     _workInProgressHook = null;
-    unmountPhaseEffectQueue.forEach((callback) => callback());
-    unmountPhaseEffectQueue.clear();
+    effectCleanupQueue.forEach((cleanup) => cleanup());
+    effectCleanupQueue.clear();
     super.unmount();
   }
 

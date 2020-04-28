@@ -74,27 +74,6 @@ void main() {
     expect(effectResult, 1);
   });
 
-  testWidgets('remove effect', (tester) async {
-    int effectResult = 0;
-
-    await tester.pumpWidget(HookBuilder(
-      builder: () {
-        useEffect(() {
-          effectResult = 1;
-          return () {
-            effectResult = 2;
-          };
-        });
-        return Container();
-      },
-    ));
-
-    expect(effectResult, 1);
-
-    await tester.pumpWidget(SizedBox());
-
-    expect(effectResult, 2);
-  });
   testWidgets('effect should called after setState', (tester) async {
     StateContainer<int> stateContainer;
     int effectResult = 0;
@@ -120,7 +99,7 @@ void main() {
     await tester.pump();
 
     expect(stateContainer.state, 1);
-    expect(effectResult, 2);
+    expect(effectResult, 1);
 
     await tester.pumpWidget(SizedBox());
 
