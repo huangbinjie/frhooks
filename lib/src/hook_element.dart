@@ -3,24 +3,16 @@ part of './hook.dart';
 class _HookTypeError extends Error {}
 
 class HookElement extends StatelessElement {
-  Hook hook = Hook();
-
-  // List<void Function() Function() | Future<void Function() Function()>
-  List<dynamic Function()> effectQueue = [];
-
-  List<void Function()> effectCleanupQueue = [];
+  _Hook hook = _Hook();
+  _Effect lastEffect;
 
   HookElement(HookWidget widget) : super(widget);
 
   Widget resetHooksAndReBuild() {
-    hook = Hook();
-    _workInProgressHook = null;
-    effectCleanupQueue.forEach((cleanup) => cleanup());
-    effectCleanupQueue.clear();
-    effectQueue.clear();
+    hook = _Hook();
 
     debugPrint(
-        "Seems you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}");
+        "It looks like you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}.");
 
     return build();
   }
@@ -47,43 +39,34 @@ class HookElement extends StatelessElement {
 
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
-    effectCleanupQueue.forEach((cleanup) => cleanup());
-    effectCleanupQueue.clear();
-
-    effectQueue.forEach((create) {
-      var cleanup = create();
-      if (cleanup != null) {
-        if (cleanup is Future) {
-          cleanup.then((cb) {
-            if (cb != null) {
-              effectCleanupQueue.add(cb);
-            }
-          });
+    var effect = lastEffect;
+    do {
+      if (effect.needUpdate) {
+        effect?.destroy?.call();
+        var destroy = effect.create();
+        if (destroy is Function) {
+          effect.destroy = destroy;
         } else {
-          effectCleanupQueue.add(cleanup);
+          if (destroy is Future) {
+            throw FlutterError(
+                'It looks like you wrote useEffect(async () => ...) or returned a Promise.');
+          }
+
+          throw FlutterError(
+              'An effect function must not return anything besides a function, which is used for clean-up.');
         }
       }
-    });
-
-    effectQueue.clear();
+    } while ((effect = lastEffect?.next) != null);
   }
 
   @override
   void unmount() {
     _stashedContext = null;
     _workInProgressHook = null;
-    effectCleanupQueue.forEach((cleanup) => cleanup());
-    effectCleanupQueue.clear();
+    var effect = lastEffect;
+    do {
+      effect?.destroy?.call();
+    } while ((effect = lastEffect?.next) != null);
     super.unmount();
-  }
-
-  @override
-  void mount(parent, newSlot) {
-    super.mount(parent, newSlot);
-  }
-
-  @override
-  void update(HookWidget newWidget) {
-    super.update(newWidget);
   }
 }

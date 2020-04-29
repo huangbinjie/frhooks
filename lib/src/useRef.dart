@@ -6,7 +6,7 @@ class RefContainer<T> {
 }
 
 RefContainer<T> useRef<T>([T initialValue]) {
-  final refStateContainer = useState(RefContainer(initialValue));
+  final stateContainerRef = useState(RefContainer(initialValue));
 
-  return refStateContainer.state;
+  return stateContainerRef.state;
 }

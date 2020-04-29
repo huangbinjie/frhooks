@@ -14,22 +14,32 @@ part 'useAnimationController.dart';
 part 'hook_widget.dart';
 part 'hook_element.dart';
 
-class Hook {
+class _Hook {
   dynamic memorizedState;
-  Hook next;
+  _Hook next;
 }
 
-Hook _workInProgressHook;
+class _Effect {
+  bool needUpdate;
+  Function() create;
+  List<dynamic> deps;
+  VoidCallback destroy;
+  _Effect next;
+
+  _Effect({this.needUpdate = false, this.create, this.deps, this.destroy});
+}
+
+_Hook _workInProgressHook;
 HookElement _stashedContext;
 
-Hook _createWorkInProgressHook() {
+_Hook _createWorkInProgressHook() {
   final currentContext = _stashedContext;
 
   if (_workInProgressHook == null) {
     _workInProgressHook = currentContext.hook;
   } else {
     if (_workInProgressHook.next == null) {
-      _workInProgressHook = _workInProgressHook.next = Hook();
+      _workInProgressHook = _workInProgressHook.next = _Hook();
     } else {
       _workInProgressHook = _workInProgressHook.next;
     }
