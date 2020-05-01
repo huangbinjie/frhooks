@@ -29,6 +29,8 @@ class _Effect {
   _Effect({this.needUpdate = false, this.create, this.deps, this.destroy});
 }
 
+class _HookTypeError extends Error {}
+
 _Hook _workInProgressHook;
 HookElement _stashedContext;
 

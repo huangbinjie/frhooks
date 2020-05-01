@@ -1,7 +1,5 @@
 part of './hook.dart';
 
-class _HookTypeError extends Error {}
-
 class HookElement extends StatelessElement {
   _Hook hook = _Hook();
   _Effect lastEffect;
