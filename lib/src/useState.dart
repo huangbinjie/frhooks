@@ -22,7 +22,7 @@ StateContainer<T> useState<T>(T initialState) {
         initialState, _genSetState(_stashedContext, _workInProgressHook));
   }
 
-  /// Due to Dart allow assign [null] to [T], so null is T should be true.
+  /// Due to Dart allow assign [null] to [T], so ([null] is [T]) should be [true].
   /// However it's false, so if [initialState] is [null], should return null,
   /// rather than throw [_HookTypeError].
   if (_workInProgressHook.memorizedState is StateContainer &&

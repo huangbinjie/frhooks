@@ -24,31 +24,6 @@ void main() {
     expect(effectResult, 1);
   });
 
-  testWidgets("useEffect should momorize deps if changed", (tester) async {
-    StateContainer<int> counter;
-    HookElement context;
-    await tester.pumpWidget(HookBuilder(
-      builder: () {
-        context = useContext();
-        counter = useState(0);
-
-        useEffect(() {}, [counter.state]);
-        return Container();
-      },
-    ));
-
-    // useState { next : useEffect {}}
-    expect(context.hook.memorizedState.state, 0);
-    expect(context.hook.next.memorizedState[0], 0);
-
-    counter.setState(1);
-
-    await tester.pump();
-
-    expect(context.hook.memorizedState.state, 1);
-    expect(context.hook.next.memorizedState[0], 1);
-  });
-
   testWidgets('useDidmount', (tester) async {
     StateContainer stateContainer;
     int effectResult = 0;
@@ -74,27 +49,6 @@ void main() {
     expect(effectResult, 1);
   });
 
-  testWidgets('remove effect', (tester) async {
-    int effectResult = 0;
-
-    await tester.pumpWidget(HookBuilder(
-      builder: () {
-        useEffect(() {
-          effectResult = 1;
-          return () {
-            effectResult = 2;
-          };
-        });
-        return Container();
-      },
-    ));
-
-    expect(effectResult, 1);
-
-    await tester.pumpWidget(SizedBox());
-
-    expect(effectResult, 2);
-  });
   testWidgets('effect should called after setState', (tester) async {
     StateContainer<int> stateContainer;
     int effectResult = 0;
@@ -120,25 +74,10 @@ void main() {
     await tester.pump();
 
     expect(stateContainer.state, 1);
-    expect(effectResult, 2);
+    expect(effectResult, 1);
 
     await tester.pumpWidget(SizedBox());
 
     expect(effectResult, 0);
-  });
-
-  testWidgets('useAsyncEffect basic', (tester) async {
-    int effectResult = 0;
-
-    await tester.pumpWidget(HookBuilder(
-      builder: () {
-        useAsyncEffect(() async {
-          effectResult = await Future.value(1);
-        });
-        return Container();
-      },
-    ));
-
-    expect(effectResult, 1);
   });
 }

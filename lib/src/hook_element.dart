@@ -1,26 +1,16 @@
 part of './hook.dart';
 
-class _HookTypeError extends Error {}
-
 class HookElement extends StatelessElement {
-  Hook hook = Hook();
-
-  // List<void Function() Function() | Future<void Function() Function()>
-  List<dynamic Function()> updatePhaseEffectQueue = [];
-
-  List<void Function()> unmountPhaseEffectQueue = [];
+  _Hook hook = _Hook();
+  _Effect lastEffect;
 
   HookElement(HookWidget widget) : super(widget);
 
   Widget resetHooksAndReBuild() {
-    hook = Hook();
-    _workInProgressHook = null;
-    updatePhaseEffectQueue.clear();
-    unmountPhaseEffectQueue.forEach((callback) => callback());
-    unmountPhaseEffectQueue.clear();
+    hook = _Hook();
 
     debugPrint(
-        "Seems you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}");
+        "It looks like you have inserted/removed a hook, hooks will rerun the build(BuildContext context) of ${widget}.");
 
     return build();
   }
@@ -47,40 +37,40 @@ class HookElement extends StatelessElement {
 
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
-    updatePhaseEffectQueue.forEach((callback) {
-      var removeEffectCallback = callback();
-      if (removeEffectCallback != null) {
-        if (removeEffectCallback is Future) {
-          removeEffectCallback.then((cb) {
-            if (cb != null) {
-              unmountPhaseEffectQueue.add(cb);
-            }
-          });
-        } else {
-          unmountPhaseEffectQueue.add(removeEffectCallback);
-        }
-      }
-    });
+    if (lastEffect != null) {
+      var effect = lastEffect;
+      do {
+        if (effect.needUpdate) {
+          effect?.destroy?.call();
+          var destroy = effect.create();
+          if (destroy != null) {
+            if (destroy is Function) {
+              effect.destroy = destroy;
+            } else {
+              if (destroy is Future) {
+                throw FlutterError(
+                    'It looks like you wrote useEffect(async () => ...) or returned a Promise.');
+              }
 
-    updatePhaseEffectQueue.clear();
+              throw FlutterError(
+                  'An effect function must not return anything besides a function, which is used for clean-up.');
+            }
+          }
+        }
+      } while ((effect = lastEffect?.next) != null);
+    }
   }
 
   @override
   void unmount() {
     _stashedContext = null;
     _workInProgressHook = null;
-    unmountPhaseEffectQueue.forEach((callback) => callback());
-    unmountPhaseEffectQueue.clear();
+    if (lastEffect != null) {
+      var effect = lastEffect;
+      do {
+        effect?.destroy?.call();
+      } while ((effect = lastEffect?.next) != null);
+    }
     super.unmount();
-  }
-
-  @override
-  void mount(parent, newSlot) {
-    super.mount(parent, newSlot);
-  }
-
-  @override
-  void update(HookWidget newWidget) {
-    super.update(newWidget);
   }
 }

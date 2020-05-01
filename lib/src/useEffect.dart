@@ -1,37 +1,26 @@
 part of 'hook.dart';
 
-useEffect(void Function() Function() effectCallback, [List<dynamic> deps]) {
+_Effect _pushEffect(needUpdate, create, deps, destroy) {
   var currentContext = _stashedContext;
-  _workInProgressHook = _createWorkInProgressHook();
-
-  if (_workInProgressHook.memorizedState == null) {
-    _workInProgressHook.memorizedState = deps;
-    currentContext.updatePhaseEffectQueue.add(effectCallback);
+  var effect = _Effect(
+      needUpdate: needUpdate, destroy: destroy, create: create, deps: deps);
+  if (currentContext.lastEffect == null) {
+    currentContext.lastEffect = effect;
   } else {
-    var prevDeps = _workInProgressHook.memorizedState;
-
-    // if dependencies changed, should memorize changed dependencies.
-    if (!areHookInputsEqual(prevDeps, deps)) {
-      _workInProgressHook.memorizedState = deps;
-      currentContext.updatePhaseEffectQueue.add(effectCallback);
-    }
+    currentContext.lastEffect = currentContext.lastEffect.next = effect;
   }
+  return effect;
 }
 
-useAsyncEffect(Future<void Function()> Function() effectCallback,
-    [List<dynamic> deps]) {
-  var currentContext = _stashedContext;
+useEffect(Function() create, [List<dynamic> deps]) {
   _workInProgressHook = _createWorkInProgressHook();
 
-  if (_workInProgressHook.memorizedState == null) {
-    _workInProgressHook.memorizedState = deps;
-    currentContext.updatePhaseEffectQueue.add(effectCallback);
-  } else {
-    var prevDeps = _workInProgressHook.memorizedState;
+  _Effect prevEffects = _workInProgressHook.memorizedState;
 
-    if (!areHookInputsEqual(prevDeps, deps)) {
-      _workInProgressHook.memorizedState = deps;
-      currentContext.updatePhaseEffectQueue.add(effectCallback);
-    }
+  if (areHookInputsEqual(prevEffects?.deps, deps)) {
+    _pushEffect(false, create, deps, prevEffects?.destroy);
+  } else {
+    _workInProgressHook.memorizedState =
+        _pushEffect(true, create, deps, prevEffects?.destroy);
   }
 }
