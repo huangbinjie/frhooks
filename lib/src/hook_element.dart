@@ -37,34 +37,40 @@ class HookElement extends StatelessElement {
 
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
-    var effect = lastEffect;
-    do {
-      if (effect.needUpdate) {
-        effect?.destroy?.call();
-        var destroy = effect.create();
-        if (destroy is Function) {
-          effect.destroy = destroy;
-        } else {
-          if (destroy is Future) {
-            throw FlutterError(
-                'It looks like you wrote useEffect(async () => ...) or returned a Promise.');
-          }
+    if (lastEffect != null) {
+      var effect = lastEffect;
+      do {
+        if (effect.needUpdate) {
+          effect?.destroy?.call();
+          var destroy = effect.create();
+          if (destroy != null) {
+            if (destroy is Function) {
+              effect.destroy = destroy;
+            } else {
+              if (destroy is Future) {
+                throw FlutterError(
+                    'It looks like you wrote useEffect(async () => ...) or returned a Promise.');
+              }
 
-          throw FlutterError(
-              'An effect function must not return anything besides a function, which is used for clean-up.');
+              throw FlutterError(
+                  'An effect function must not return anything besides a function, which is used for clean-up.');
+            }
+          }
         }
-      }
-    } while ((effect = lastEffect?.next) != null);
+      } while ((effect = lastEffect?.next) != null);
+    }
   }
 
   @override
   void unmount() {
     _stashedContext = null;
     _workInProgressHook = null;
-    var effect = lastEffect;
-    do {
-      effect?.destroy?.call();
-    } while ((effect = lastEffect?.next) != null);
+    if (lastEffect != null) {
+      var effect = lastEffect;
+      do {
+        effect?.destroy?.call();
+      } while ((effect = lastEffect?.next) != null);
+    }
     super.unmount();
   }
 }
