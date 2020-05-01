@@ -71,3 +71,7 @@ Fix: Pass null to useState should not cause rerender.
 # 1.4.4
 
 Fix: clean stashedContext after unmount.
+
+# 1.4.5
+
+Fix: fixed a problem which effect forgot cleanup after recreate.
