@@ -1,22 +1,20 @@
-# see https://medium.com/flutter-io/test-flutter-apps-on-travis-3fd5142ecd8c
 os:
-- linux
+  - linux
 sudo: false
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
     sources:
-    - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
     packages:
-    - libstdc++6
-    - fonts-droid
+      - libstdc++6
+      - fonts-droid-fallback
 before_script:
-  - rm -fr $HOME/flutter
-  - git clone https://github.com/flutter/flutter.git -b beta $HOME/flutter
-  - $HOME/flutter/bin/flutter doctor
+  - git clone https://github.com/flutter/flutter.git
+  - ./flutter/bin/flutter doctor
 script:
-  - $HOME/flutter/bin/flutter test
+  - ./flutter/bin/flutter test
 cache:
   directories:
-  - $HOME/.pub-cache
-  - $HOME/flutter
+    - $HOME/.pub-cache
+    
