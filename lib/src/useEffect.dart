@@ -5,8 +5,9 @@ _Effect _pushEffect(needUpdate, create, deps, destroy) {
   var effect = _Effect(
       needUpdate: needUpdate, destroy: destroy, create: create, deps: deps);
   if (currentContext.lastEffect == null) {
-    currentContext.lastEffect = effect;
+    currentContext.lastEffect = effect.next = effect;
   } else {
+    effect.next = currentContext.lastEffect;
     currentContext.lastEffect = currentContext.lastEffect.next = effect;
   }
   return effect;

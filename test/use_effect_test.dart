@@ -34,19 +34,25 @@ void main() {
         useEffect(() {
           effectResult++;
         }, []);
+
+        useEffect(() {
+          effectResult++;
+        });
         return Container();
       },
     ));
 
+    await tester.pump();
+
     expect(stateContainer.state, 0);
-    expect(effectResult, 1);
+    expect(effectResult, 2);
 
     stateContainer.setState(1);
 
     await tester.pump();
 
     expect(stateContainer.state, 1);
-    expect(effectResult, 1);
+    expect(effectResult, 3);
   });
 
   testWidgets('effect should called after setState', (tester) async {

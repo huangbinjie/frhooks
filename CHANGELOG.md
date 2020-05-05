@@ -76,3 +76,7 @@ Fix: clean stashedContext after unmount.
 
 Fix: fixed a problem which effect forgot cleanup after recreate.
 Removal: remove `useAsyncEffect`.
+
+# 1.5.1
+
+Fix: `useEffect` not working as expected with multiple effects.

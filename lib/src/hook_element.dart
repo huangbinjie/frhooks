@@ -38,7 +38,8 @@ class HookElement extends StatelessElement {
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
     if (lastEffect != null) {
-      var effect = lastEffect;
+      var firstEffect = lastEffect.next;
+      var effect = firstEffect;
       do {
         if (effect.needUpdate) {
           effect?.destroy?.call();
@@ -57,7 +58,7 @@ class HookElement extends StatelessElement {
             }
           }
         }
-      } while ((effect = lastEffect?.next) != null);
+      } while ((effect = effect.next) != firstEffect);
     }
   }
 
@@ -66,10 +67,11 @@ class HookElement extends StatelessElement {
     _stashedContext = null;
     _workInProgressHook = null;
     if (lastEffect != null) {
-      var effect = lastEffect;
+      var firstEffect = lastEffect.next;
+      var effect = firstEffect;
       do {
         effect?.destroy?.call();
-      } while ((effect = lastEffect?.next) != null);
+      } while ((effect = effect.next) != firstEffect);
     }
     super.unmount();
   }
