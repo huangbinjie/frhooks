@@ -7,8 +7,10 @@ _Effect _pushEffect(needUpdate, create, deps, destroy) {
   if (currentContext.lastEffect == null) {
     currentContext.lastEffect = effect.next = effect;
   } else {
-    effect.next = currentContext.lastEffect;
-    currentContext.lastEffect = currentContext.lastEffect.next = effect;
+    var firstEffect = currentContext.lastEffect.next;
+    currentContext.lastEffect.next = effect;
+    effect.next = firstEffect;
+    currentContext.lastEffect = effect;
   }
   return effect;
 }

@@ -30,6 +30,7 @@ class HookElement extends StatelessElement {
   }
 
   void willBuild() {
+    lastEffect = null;
     _stashedContext = this;
     _workInProgressHook = null;
     WidgetsBinding.instance.addPostFrameCallback(didBuild);
@@ -64,6 +65,7 @@ class HookElement extends StatelessElement {
 
   @override
   void unmount() {
+    super.unmount();
     _stashedContext = null;
     _workInProgressHook = null;
     if (lastEffect != null) {
@@ -72,7 +74,7 @@ class HookElement extends StatelessElement {
       do {
         effect?.destroy?.call();
       } while ((effect = effect.next) != firstEffect);
+      lastEffect = null;
     }
-    super.unmount();
   }
 }

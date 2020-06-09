@@ -32,9 +32,8 @@ void main() {
       ErrorSummary summary = error.summary;
 
       expectSync(
-          summary
-              .toDescription()
-              .contains("HookBuilder was disposed with an active Ticker."),
+          summary.toDescription().contains(
+              "An animation is still running even after the widget tree was disposed."),
           true);
 
       controller.stop();

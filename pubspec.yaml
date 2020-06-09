@@ -1,6 +1,6 @@
 name: frhooks
 description: Use react hooks in flutter!
-version: 1.5.1
+version: 1.5.2
 homepage: https://github.com/huangbinjie/frhooks
 
 environment:

@@ -6,12 +6,14 @@ import './hook_builder.dart';
 void main() {
   testWidgets('useEffect basic', (tester) async {
     int effectResult = 0;
+    StateContainer stateContainer;
 
     await tester.pumpWidget(HookBuilder(
       builder: () {
         final context = useContext();
+        stateContainer = useState(0);
         useEffect(() {
-          effectResult = 1;
+          effectResult++;
 
           /// context.size can not be read during rebuild or relayout.
           /// this expect this callback should be call after relayout completely.
@@ -22,6 +24,12 @@ void main() {
     ));
 
     expect(effectResult, 1);
+
+    stateContainer.setState(1);
+
+    await tester.pump();
+
+    expect(effectResult, 2);
   });
 
   testWidgets('useDidmount', (tester) async {
@@ -33,6 +41,8 @@ void main() {
         stateContainer = useState(0);
         useEffect(() {
           effectResult++;
+
+          return () => effectResult = 0;
         }, []);
 
         useEffect(() {
@@ -53,6 +63,10 @@ void main() {
 
     expect(stateContainer.state, 1);
     expect(effectResult, 3);
+
+    await tester.pumpWidget(Container());
+
+    expect(effectResult, 0);
   });
 
   testWidgets('effect should called after setState', (tester) async {
@@ -64,10 +78,10 @@ void main() {
         stateContainer = useState(0);
         useEffect(() {
           effectResult++;
-          return () {
-            effectResult = 0;
-          };
         });
+
+        // trigger after unmount.
+        useEffect(() => () => effectResult = 0, []);
         return Container();
       },
     ));
@@ -80,7 +94,7 @@ void main() {
     await tester.pump();
 
     expect(stateContainer.state, 1);
-    expect(effectResult, 1);
+    expect(effectResult, 2);
 
     await tester.pumpWidget(SizedBox());
 

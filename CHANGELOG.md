@@ -80,3 +80,7 @@ Removal: remove `useAsyncEffect`.
 # 1.5.1
 
 Fix: `useEffect` not working as expected with multiple effects.
+
+# 1.5.2
+
+Fix: `useEffect` may be lost.
