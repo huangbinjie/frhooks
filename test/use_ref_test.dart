@@ -5,8 +5,8 @@ import './hook_builder.dart';
 
 void main() {
   testWidgets("useRef basic", (tester) async {
-    RefContainer<int> ref;
-    StateContainer state;
+    late RefContainer<int> ref;
+    late StateContainer state;
     await tester.pumpWidget(HookBuilder(builder: () {
       ref = useRef(0);
       state = useState(0);

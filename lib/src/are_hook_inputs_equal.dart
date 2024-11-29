@@ -1,4 +1,4 @@
-areHookInputsEqual(List listA, List listB) {
+areHookInputsEqual(List? listA, List? listB) {
   if (listA == null || listB == null) {
     return false;
   }

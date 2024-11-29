@@ -5,5 +5,5 @@ HookElement useContext() {
 
   assert(currentContext != null);
 
-  return currentContext;
+  return currentContext!;
 }

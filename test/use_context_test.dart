@@ -5,7 +5,7 @@ import './hook_builder.dart';
 
 void main() {
   testWidgets('useContext basic', (tester) async {
-    HookElement element;
+    late HookElement element;
 
     await tester.pumpWidget(HookBuilder(builder: () {
       element = useContext();
