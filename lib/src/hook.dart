@@ -16,36 +16,37 @@ part 'hook_element.dart';
 
 class _Hook {
   dynamic memorizedState;
-  _Hook next;
+  _Hook? next;
 }
 
 class _Effect {
   bool needUpdate;
-  Function() create;
-  List<dynamic> deps;
-  VoidCallback destroy;
-  _Effect next;
+  dynamic Function() create;
+  List<dynamic>? deps;
+  VoidCallback? destroy;
+  _Effect? next;
 
-  _Effect({this.needUpdate = false, this.create, this.deps, this.destroy});
+  _Effect(
+      {this.needUpdate = false, required this.create, this.deps, this.destroy});
 }
 
 class _HookTypeError extends Error {}
 
-_Hook _workInProgressHook;
-HookElement _stashedContext;
+_Hook? _workInProgressHook;
+HookElement? _stashedContext;
 
 _Hook _createWorkInProgressHook() {
   final currentContext = _stashedContext;
 
   if (_workInProgressHook == null) {
-    _workInProgressHook = currentContext.hook;
+    _workInProgressHook = currentContext?.hook;
   } else {
-    if (_workInProgressHook.next == null) {
-      _workInProgressHook = _workInProgressHook.next = _Hook();
+    if (_workInProgressHook!.next == null) {
+      _workInProgressHook = _workInProgressHook!.next = _Hook();
     } else {
-      _workInProgressHook = _workInProgressHook.next;
+      _workInProgressHook = _workInProgressHook!.next;
     }
   }
 
-  return _workInProgressHook;
+  return _workInProgressHook!;
 }

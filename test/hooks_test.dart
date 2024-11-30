@@ -5,10 +5,10 @@ import './hook_builder.dart';
 
 void main() {
   testWidgets("support conditional hooks", (tester) async {
-    StateContainer<int> firstStateContainer;
-    StateContainer<String> secondStateContainer;
-    int memorizedState;
-    HookElement element;
+    late StateContainer<int> firstStateContainer;
+    StateContainer<String>? secondStateContainer;
+    late int memorizedState;
+    late HookElement element;
     int builtTime = 0;
 
     await tester.pumpWidget(HookBuilder(
@@ -32,7 +32,7 @@ void main() {
 
     expect(memorizedState, 0);
     expect(builtTime, 1);
-    expect(secondStateContainer.state, "some value");
+    expect(secondStateContainer?.state, "some value");
 
     builtTime = 1;
 

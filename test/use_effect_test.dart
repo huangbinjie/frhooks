@@ -6,7 +6,7 @@ import './hook_builder.dart';
 void main() {
   testWidgets('useEffect basic', (tester) async {
     int effectResult = 0;
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
 
     await tester.pumpWidget(HookBuilder(
       builder: () {
@@ -33,7 +33,7 @@ void main() {
   });
 
   testWidgets('useDidmount', (tester) async {
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     int effectResult = 0;
 
     await tester.pumpWidget(HookBuilder(
@@ -70,7 +70,7 @@ void main() {
   });
 
   testWidgets('effect should called after setState', (tester) async {
-    StateContainer<int> stateContainer;
+    late StateContainer<int> stateContainer;
     int effectResult = 0;
 
     await tester.pumpWidget(HookBuilder(

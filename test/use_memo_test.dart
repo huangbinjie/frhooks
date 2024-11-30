@@ -6,7 +6,7 @@ import './hook_builder.dart';
 void main() {
   testWidgets("useMemo basic", (tester) async {
     List<Map<String, dynamic>> memorizedStates = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       final memorizedState = useMemo(() => {"n": 1});
       stateContainer = useState(0);
@@ -30,7 +30,7 @@ void main() {
 
   testWidgets("same useMemo inputs return first used value", (tester) async {
     List<Map<String, dynamic>> memorizedStates = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
       final memorizedState = useMemo(() => {"n": 1}, []);
@@ -47,7 +47,7 @@ void main() {
 
   testWidgets("useMemo changing inputs return new value", (tester) async {
     List memorizedStates = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
       final memorizedState = useMemo(() => {"n": 1}, [stateContainer.state]);

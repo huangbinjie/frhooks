@@ -5,8 +5,8 @@ import './hook_builder.dart';
 
 void main() {
   testWidgets('useState basic', (tester) async {
-    StateContainer<int> stateContainer;
-    HookElement element;
+    late StateContainer<int> stateContainer;
+    late HookElement element;
 
     await tester.pumpWidget(HookBuilder(
       builder: () {
@@ -48,7 +48,7 @@ void main() {
   testWidgets("useState should return same the reference of StateContainer .",
       (tester) async {
     List<StateContainer<int>> stateContainers = [];
-    HookElement context;
+    late HookElement context;
     await tester.pumpWidget(HookBuilder(builder: () {
       context = useContext();
       stateContainers.add(useState(1));
@@ -65,8 +65,8 @@ void main() {
   });
 
   testWidgets("build widget before useState", (tester) async {
-    StateContainer<int> stateContainer;
-    StateContainer<String> childStateContainer;
+    late StateContainer<int> stateContainer;
+    late StateContainer<String> childStateContainer;
     int renderedNum = 0;
 
     await tester.pumpWidget(HookBuilder(
@@ -95,13 +95,13 @@ void main() {
   });
 
   testWidgets("useState should accept null as parameter.", (tester) async {
-    StateContainer<int> stateContainer;
+    late StateContainer<int?> stateContainer;
     int renderedNum = 0;
 
     await tester.pumpWidget(HookBuilder(
       builder: () {
         renderedNum++;
-        stateContainer = useState<int>(null);
+        stateContainer = useState<int?>(null);
         return Container();
       },
     ));

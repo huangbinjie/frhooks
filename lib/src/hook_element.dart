@@ -2,9 +2,9 @@ part of './hook.dart';
 
 class HookElement extends StatelessElement {
   _Hook hook = _Hook();
-  _Effect lastEffect;
+  _Effect? lastEffect;
 
-  HookElement(HookWidget widget) : super(widget);
+  HookElement(HookWidget super.widget);
 
   Widget resetHooksAndReBuild() {
     hook = _Hook();
@@ -39,15 +39,15 @@ class HookElement extends StatelessElement {
   /// cause of [mount] called before [build]. So create a method [didBuild] for react like didUpdate.
   void didBuild(Duration duration) {
     if (lastEffect != null) {
-      var firstEffect = lastEffect.next;
+      var firstEffect = lastEffect!.next;
       var effect = firstEffect;
       do {
-        if (effect.needUpdate) {
+        if (effect?.needUpdate == true) {
           effect?.destroy?.call();
-          var destroy = effect.create();
+          var destroy = effect?.create();
           if (destroy != null) {
             if (destroy is Function) {
-              effect.destroy = destroy;
+              effect?.destroy = destroy as VoidCallback?;
             } else {
               if (destroy is Future) {
                 throw FlutterError(
@@ -59,7 +59,7 @@ class HookElement extends StatelessElement {
             }
           }
         }
-      } while ((effect = effect.next) != firstEffect);
+      } while ((effect = effect?.next) != firstEffect);
     }
   }
 
@@ -69,11 +69,11 @@ class HookElement extends StatelessElement {
     _stashedContext = null;
     _workInProgressHook = null;
     if (lastEffect != null) {
-      var firstEffect = lastEffect.next;
+      var firstEffect = lastEffect!.next;
       var effect = firstEffect;
       do {
         effect?.destroy?.call();
-      } while ((effect = effect.next) != firstEffect);
+      } while ((effect = effect!.next) != firstEffect);
       lastEffect = null;
     }
   }

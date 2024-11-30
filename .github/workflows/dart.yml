@@ -2,27 +2,20 @@ name: Dart CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
-    container:
-      image:  google/dart:dev
-
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
 
-    - name: install dependencies
-      uses: steebchen/flutter@v1.1.0
-      with:
-        args: pub get
+      - name: install dependencies
+        run: flutter pub get
 
-    - name: run tests
-      uses: steebchen/flutter@v1.1.0
-      with:
-        args: test
+      - name: run tests
+        run: flutter test

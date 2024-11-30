@@ -1,7 +1,7 @@
 part of './hook.dart';
 
 abstract class HookWidget extends StatelessWidget {
-  const HookWidget({Key key}) : super(key: key);
+  const HookWidget({super.key});
 
   @override
   HookElement createElement() {
@@ -20,17 +20,17 @@ mixin HookAutomaticKeepAliveClientMixin on HookWidget {
   @mustCallSuper
   @override
   Widget build(BuildContext context) {
-    RefContainer<bool> wantKeepAliveRef = useRef(wantKeepAlive);
-    RefContainer<KeepAliveHandle> keepAliveHandleRef = useRef(null);
+    RefContainer<bool?> wantKeepAliveRef = useRef(wantKeepAlive);
+    RefContainer<KeepAliveHandle?> keepAliveHandleRef = useRef(null);
 
     final ensureKeepAlive = useCallback(() {
       assert(keepAliveHandleRef.current == null);
       keepAliveHandleRef.current = KeepAliveHandle();
-      KeepAliveNotification(keepAliveHandleRef.current).dispatch(context);
+      KeepAliveNotification(keepAliveHandleRef.current!).dispatch(context);
     }, []);
 
     final releaseKeepAlive = useCallback(() {
-      keepAliveHandleRef.current.release();
+      keepAliveHandleRef.current?.dispose();
       keepAliveHandleRef.current = null;
     }, []);
 
@@ -55,6 +55,6 @@ mixin HookAutomaticKeepAliveClientMixin on HookWidget {
       };
     }, []);
 
-    return null;
+    return Container();
   }
 }

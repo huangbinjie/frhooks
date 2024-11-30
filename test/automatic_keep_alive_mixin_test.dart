@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frhooks/frhooks.dart';
 
@@ -29,8 +28,8 @@ class KeepAliveMixinTest extends HookWidget
 void main() {
   testWidgets("HookAutomaticKeepAliveClientMixin basic", (tester) async {
     int _builtTime = 0;
-    PageController pageController;
-    StateContainer pageIndexState;
+    late PageController pageController;
+    late StateContainer pageIndexState;
     await tester.pumpWidget(HookBuilder(
       builder: () {
         pageIndexState = useState(0);

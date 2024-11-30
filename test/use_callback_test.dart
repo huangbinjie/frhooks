@@ -6,7 +6,7 @@ import './hook_builder.dart';
 void main() {
   testWidgets("useCallback basic", (tester) async {
     List cbList = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       var cb = useCallback(() {
         return 1;
@@ -31,16 +31,18 @@ void main() {
   });
 
   testWidgets("useCallback with varargs function", (tester) async {
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     List cbList = [];
-    await tester.pumpWidget(HookBuilder(builder: () {
-      stateContainer = useState(0);
-      final cb = useCallback((int index) {
-        return index;
-      }, []);
-      cbList.add(cb);
-      return Container();
-    },));
+    await tester.pumpWidget(HookBuilder(
+      builder: () {
+        stateContainer = useState(0);
+        final cb = useCallback((int index) {
+          return index;
+        }, []);
+        cbList.add(cb);
+        return Container();
+      },
+    ));
 
     await tester.pump();
 
@@ -53,13 +55,12 @@ void main() {
     expect(cbList[0], cbList[1]);
 
     expect(cbList[1](2), 2);
-
   });
 
   testWidgets("same useCallback inputs return first used callback",
       (tester) async {
     List cbList = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
       var cb = useCallback(() {
@@ -79,7 +80,7 @@ void main() {
   testWidgets("useCallback changing inputs return new callback",
       (tester) async {
     List cbList = [];
-    StateContainer stateContainer;
+    late StateContainer stateContainer;
     await tester.pumpWidget(HookBuilder(builder: () {
       stateContainer = useState(0);
       var cb = useCallback(() {

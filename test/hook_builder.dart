@@ -13,10 +13,9 @@ class HookBuilder extends HookWidget {
   ///
   /// The [builder] argument must not be null.
   const HookBuilder({
-    this.builder,
-    Key key,
-  })  : assert(builder != null),
-        super(key: key);
+    required this.builder,
+    super.key,
+  });
 
   @override
   Widget build(context) => builder();
